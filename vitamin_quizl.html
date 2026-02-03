@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الفيتامينات | Vitamins MCQ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .quiz-container {
+            padding: 30px;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-right: 5px solid #667eea;
+            transition: transform 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateX(-5px);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #e8eeff;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .option-letter {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border-right: 4px solid #2196f3;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .correct-icon { background: #4caf50; color: white; }
+        .wrong-icon { background: #f44336; color: white; }
+        .remaining-icon { background: #ff9800; color: white; }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .result-message {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.5em;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s;
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+            .header h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="stats">
+    <div class="stat-item">
+        <span class="stat-icon correct-icon">✓</span>
+        <span id="correct-count">0</span> صح
+    </div>
+    <div class="stat-item">
+        <span class="stat-icon wrong-icon">✗</span>
+        <span id="wrong-count">0</span> خطأ
+    </div>
+    <div class="stat-item">
+        <span class="stat-icon remaining-icon">?</span>
+        <span id="remaining-count">20</span> متبقي
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h1>🧬 اختبار الفيتامينات</h1>
+        <p>20 سؤال تفاعلي في علم الأحياء والكيمياء الحيوية</p>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <div class="quiz-container" id="quiz">
+        <!-- Questions will be inserted here -->
+    </div>
+
+    <div class="result-message" id="result">
+        <h2>🎉 اكتمل الاختبار!</h2>
+        <p id="final-score"></p>
+        <button class="btn" onclick="location.reload()">إعادة الاختبار</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "أي صورة من فيتامين A مسؤولة عن الرؤية الليلية؟",
+        options: ["Retinol", "Retinal", "Retinoic acid", "Beta-carotene"],
+        correct: 1,
+        explain: "Retinal هو الشكل المستخدم في الخلايا العصبية للشبكية (rhodopsin) للرؤية الليلية."
+    },
+    {
+        q: "أعراض نقص فيتامين A تشمل:",
+        options: ["Rickets", "Night blindness", "Scurvy", "Pellagra"],
+        correct: 1,
+        explain: "Night blindness (العشى الليلي) من أولى أعراض نقص فيتامين A."
+    },
+    {
+        q: "أي عضو يحول فيتامين D لصورته النشطة (1,25-dihydroxy)؟",
+        options: ["الجلد", "الكبد", "الكلى", "الأمعاء"],
+        correct: 2,
+        explain: "الكلى تقوم بتحويل 25-hydroxyvitamin D إلى 1,25-dihydroxyvitamin D (الصورة النشطة)."
+    },
+    {
+        q: "نقص فيتامين D عند الأطفال يسبب:",
+        options: ["Osteomalacia", "Rickets", "Osteoporosis", "Scurvy"],
+        correct: 1,
+        explain: "Rickets هو لين العظام عند الأطفال نتيجة نقص فيتامين D."
+    },
+    {
+        q: "الوظيفة الأساسية لفيتامين E هي:",
+        options: ["تخثر الدم", "مضاد أكسدة", "امتصاص الكالسيوم", "إنتاج الطاقة"],
+        correct: 1,
+        explain: "فيتامين E هو أهم مضاد أكسدة دهني في الجسم (lipid-soluble antioxidant)."
+    },
+    {
+        q: "نقص فيتامين E نادر لكنه يسبب:",
+        options: ["Anemia hemolytic (عند الخدج)", "Blindness", "Bleeding", "Dermatitis"],
+        correct: 0,
+        explain: "عند الخدج، نقص فيتامين E يسبب انحلال الدم (hemolytic anemia)."
+    },
+    {
+        q: "فيتامين K ضروري لتفعيل عوامل التخثر:",
+        options: ["II, VII, IX, X", "I, V, VIII", "XI, XII, XIII", "All of the above"],
+        correct: 0,
+        explain: "فيتامين K يفعل عوامل التخثر II, VII, IX, X عن طريق carboxylation."
+    },
+    {
+        q: "فيتامين K يُنتج طبيعياً بواسطة:",
+        options: ["الجلد", "بكتيريا الأمعاء", "الكبد", "الكلى"],
+        correct: 1,
+        explain: "بكتيريا القولون تُنتج فيتامين K2 (menaquinone) بكميات كافية."
+    },
+    {
+        q: "Scurvy يسببها نقص:",
+        options: ["Vitamin B1", "Vitamin C", "Vitamin D", "Vitamin K"],
+        correct: 1,
+        explain: "Scurvy يسببها نقص فيتامين C (Ascorbic acid)."
+    },
+    {
+        q: "فيتامين C ضروري لـ:",
+        options: ["تكوين الكولاجين", "تكوين الـ DNA", "تخثر الدم", "امتصاص الحديد فقط"],
+        correct: 0,
+        explain: "فيتامين C ضروري كـ cofactor لإنزيمات تكوين الكولاجين (hydroxylation)."
+    },
+    {
+        q: "Beriberi يسببها نقص:",
+        options: ["Riboflavin", "Thiamine", "Niacin", "Cobalamin"],
+        correct: 1,
+        explain: "Beriberi (جاف ورطب) يسببها نقص Thiamine (فيتامين B1)."
+    },
+    {
+        q: "Wernicke-Korsakoff syndrome مرتبطة بنقص:",
+        options: ["Folic acid", "Thiamine", "Vitamin B6", "Biotin"],
+        correct: 1,
+        explain: "Wernicke-Korsakoff شائعة عند الكحوليين بسبب نقص Thiamine."
+    },
+    {
+        q: "أعراض نقص Riboflavin تشمل:",
+        options: ["Cheilosis و Glossitis", "Pellagra", "Megaloblastic anemia", "Peripheral neuropathy"],
+        correct: 0,
+        explain: "Cheilosis (تشققات الشفاه) و Glossitis (اللسان الأحمر) من أعراض B2."
+    },
+    {
+        q: "Pellagra تتميز بـ 'الثلاثي D':",
+        options: ["Diarrhea, Dermatitis, Dementia", "Dyspnea, Diarrhea, Death", "Dermatitis, Deafness, Blindness", "All of the above"],
+        correct: 0,
+        explain: "الثلاثي الكلاسيكي: Diarrhea, Dermatitis, Dementia (والموت الرابع)."
+    },
+    {
+        q: "Niacin يُصنع من:",
+        options: ["Tryptophan", "Phenylalanine", "Tyrosine", "Methionine"],
+        correct: 0,
+        explain: "Niacin (B3) يُصنع من Tryptophan (60mg Tryptophan = 1mg Niacin)."
+    },
+    {
+        q: "فيتامين B6 يشارك في:",
+        options: ["تكوين الهيموجلوبين فقط", "أيض الأحماض الأمينية", "تخثر الدم", "امتصاص الكالسيوم"],
+        correct: 1,
+        explain: "B6 (Pyridoxal phosphate) ضروري لأيض الأحماض الأمينية (transamination)."
+    },
+    {
+        q: "Neural tube defects تُمنع بـ:",
+        options: ["Folic acid", "Vitamin B12", "Iron", "Calcium"],
+        correct: 0,
+        explain: "Folic acid قبل الحمل يقلل خطر Neural tube defects بـ 70%."
+    },
+    {
+        q: "Folic acid يُعطى قبل الحمل بـ:",
+        options: ["شهر", "3 أشهر", "6 أشهر", "سنة"],
+        correct: 1,
+        explain: "يوصى بـ 400mcg يومياً لمدة 3 أشهر قبل الحمل."
+    },
+    {
+        q: "نقص B12 يسبب:",
+        options: ["Megaloblastic anemia + Neurological symptoms", "Microcytic anemia فقط", "Hemolytic anemia", "Aplastic anemia"],
+        correct: 0,
+        explain: "B12 يسبب فقر دم ضخم الأرومات + اعتلال عصبي (subacute combined degeneration)."
+    },
+    {
+        q: "Intrinsic factor ضروري لامتصاص:",
+        options: ["Folic acid", "Vitamin B12", "Iron", "Calcium"],
+        correct: 1,
+        explain: "Intrinsic factor (من المعدة) يرتبط بـ B12 لامتصاصه في اللفائفي."
+    }
+];
+
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = new Set();
+
+function render() {
+    const quiz = document.getElementById('quiz');
+    quiz.innerHTML = '';
+    
+    questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-text">
+                <span class="question-number">${idx + 1}</span>
+                ${q.q}
+            </div>
+            <div class="options" id="opt-${idx}">
+                ${q.options.map((opt, i) => `
+                    <div class="option" onclick="check(${idx}, ${i})">
+                        <span class="option-letter">${String.fromCharCode(97 + i)}</span>
+                        ${opt}
+                    </div>
+                `).join('')}
+            </div>
+            <div class="explanation" id="exp-${idx}">
+                <strong>الشرح:</strong> ${q.explain}
+            </div>
+        `;
+        quiz.appendChild(card);
+    });
+    
+    updateStats();
+}
+
+function check(qIdx, optIdx) {
+    if (answered.has(qIdx)) return;
+    answered.add(qIdx);
+    
+    const q = questions[qIdx];
+    const opts = document.getElementById(`opt-${qIdx}`).children;
+    const exp = document.getElementById(`exp-${qIdx}`);
+    
+    if (optIdx === q.correct) {
+        opts[optIdx].classList.add('correct');
+        correct++;
+    } else {
+        opts[optIdx].classList.add('wrong');
+        opts[q.correct].classList.add('correct');
+        wrong++;
+    }
+    
+    exp.classList.add('show');
+    updateStats();
+    
+    if (answered.size === questions.length) {
+        showResult();
+    }
+}
+
+function updateStats() {
+    document.getElementById('correct-count').textContent = correct;
+    document.getElementById('wrong-count').textContent = wrong;
+    document.getElementById('remaining-count').textContent = questions.length - answered.size;
+    document.getElementById('progress').style.width = (answered.size / questions.length * 100) + '%';
+}
+
+function showResult() {
+    const percentage = Math.round((correct / questions.length) * 100);
+    let msg = '';
+    if (percentage >= 90) msg = 'ممتاز! 🌟';
+    else if (percentage >= 70) msg = 'جيد جداً! 👍';
+    else if (percentage >= 50) msg = 'يمكنك التحسن 💪';
+    else msg = 'حاول مرة أخرى 📚';
+    
+    document.getElementById('final-score').innerHTML = `
+        النتيجة: ${correct}/${questions.length} (${percentage}%)<br>
+        ${msg}
+    `;
+    document.getElementById('result').style.display = 'block';
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+render();
+</script>
+
+</body>
+</html>
